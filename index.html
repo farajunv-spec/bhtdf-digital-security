@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a22">
+  <meta name="description" content="لعبة عائلية لتعلّم السلامة الرقمية عبر إطار BHDSF.">
+  <title>أبحر بأمان | إطار BHDSF للسلامة الرقمية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/cards.js" defer></script>
+  <script src="js/dice.js" defer></script>
+  <script src="js/ai-assistant.js" defer></script>
+  <script src="js/game.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="أبحر بأمان، الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true">⌁</span>
+        <span><strong>أبحر بأمان</strong><small>إطار BHDSF للسلامة الرقمية</small></span>
+      </a>
+      <div class="topbar-meta">
+        <span class="family-tag"><span class="status-dot"></span> مساحة عائلية آمنة</span>
+        <button class="icon-button" id="reset-button" type="button" title="إعادة ضبط التقدم" aria-label="إعادة ضبط التقدم">↺</button>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="welcome-row" aria-labelledby="welcome-title">
+        <div>
+          <p class="eyebrow">رحلة من ٤٠ محطة</p>
+          <h1 id="welcome-title">كل قرار ذكي، <span>يقربك من الأمان.</span></h1>
+          <p class="welcome-copy">تعلّموا معاً كيف تبحرون بثقة في العالم الرقمي.</p>
+        </div>
+        <div class="progress-summary" aria-label="التقدم في اللعبة">
+          <span class="progress-label">تقدم الرحلة</span>
+          <strong id="progress-count">٠ / ٤٠</strong>
+          <div class="progress-track"><span id="progress-bar"></span></div>
+        </div>
+      </section>
+
+      <div class="game-layout">
+        <section class="main-column" aria-label="لوحة اللعبة">
+          <section class="board-panel panel" aria-labelledby="board-title">
+            <div class="section-heading">
+              <div><p class="eyebrow">خريطة الاستكشاف</p><h2 id="board-title">مسار الأمان الرقمي</h2></div>
+              <span class="level-counter" id="level-counter">المحطة ١ من ٤٠</span>
+            </div>
+            <div class="board-ocean">
+              <div class="board-route" id="board-route" aria-label="مراحل اللعبة"></div>
+              <div class="ocean-caption"><span class="wave-symbol" aria-hidden="true">≈</span><span>رحلة المعرفة تبدأ بخطوة</span></div>
+            </div>
+            <div class="legend" aria-label="دليل ألوان المراحل">
+              <span><i class="legend-dot unlocked"></i> مفتوحة</span>
+              <span><i class="legend-dot complete"></i> مكتملة</span>
+              <span><i class="legend-dot locked"></i> مقفلة</span>
+            </div>
+          </section>
+
+          <section class="challenge-panel panel" aria-labelledby="challenge-title">
+            <div class="section-heading challenge-heading">
+              <div><p class="eyebrow" id="challenge-category">بطاقة التحدي</p><h2 id="challenge-title">استعدوا للانطلاق</h2></div>
+              <span class="challenge-level" id="challenge-level">المحطة ١</span>
+            </div>
+            <p class="challenge-prompt" id="challenge-prompt">ارمِ نرد الحركة لتصل إلى محطتك التالية، ثم تعاونوا للإجابة عن التحدي.</p>
+            <div class="answer-grid" id="answer-grid" role="group" aria-label="خيارات الإجابة"></div>
+            <div class="challenge-footer">
+              <p class="feedback" id="game-feedback" aria-live="polite">حان دور <strong id="turn-player-name">اللاعب الأول</strong>.</p>
+              <span class="attempts-left" id="attempts-left">المحاولات: —</span>
+            </div>
+          </section>
+
+          <section class="dice-panel panel" aria-label="النرد">
+            <div class="dice-control">
+              <div class="die-face movement-die" id="movement-die" aria-hidden="true">⚄</div>
+              <div class="die-copy"><span class="die-label">نرد الحركة</span><small>خطواتك نحو المحطة التالية</small></div>
+              <button class="primary-button" id="roll-movement" type="button"><span aria-hidden="true">✦</span> ارمِ نرد الحركة</button>
+            </div>
+            <div class="dice-divider"></div>
+            <div class="dice-control attempts-control">
+              <div class="die-face attempts-die" id="attempts-die" aria-hidden="true">?</div>
+              <div class="die-copy"><span class="die-label">نرد المحاولات</span><small>يحدد فرص الإجابة المتاحة</small></div>
+              <button class="secondary-button" id="roll-attempts" type="button" disabled><span aria-hidden="true">⟳</span> اكشف المحاولات</button>
+            </div>
+          </section>
+        </section>
+
+        <aside class="side-column" aria-label="معلومات اللاعبين والمساعدة">
+          <section class="players-panel panel" aria-labelledby="players-title">
+            <div class="section-heading compact-heading"><div><p class="eyebrow">معاً نبحر</p><h2 id="players-title">طاقم الرحلة</h2></div><button class="text-button" id="add-player" type="button" aria-label="إضافة لاعب">＋ لاعب</button></div>
+            <div class="player-list" id="player-list"></div>
+            <div class="turn-indicator"><span class="turn-pulse"></span><span id="turn-indicator-text">الدور الحالي: اللاعب الأول</span></div>
+          </section>
+
+          <section class="assistant-panel panel" aria-labelledby="assistant-title">
+            <div class="assistant-header">
+              <div class="assistant-avatar" aria-hidden="true"><span>✦</span></div>
+              <div><p class="eyebrow">رفيق الرحلة</p><h2 id="assistant-title">المرشد السيبراني</h2></div>
+              <span class="online-indicator" title="جاهز للمساعدة"></span>
+            </div>
+            <div class="assistant-message" id="assistant-message" aria-live="polite">أهلاً بكم! أنا هنا لأساعدكم على التفكير بهدوء. لا توجد إجابة محرجة، والتعلّم معاً هو الأهم.</div>
+            <div class="assistant-actions">
+              <button class="hint-button" id="hint-button" type="button" disabled>أعطني تلميحاً <span aria-hidden="true">↗</span></button>
+              <button class="hint-button quiet-hint" id="encourage-button" type="button">نصيحة عائلية <span aria-hidden="true">↗</span></button>
+            </div>
+          </section>
+
+          <section class="score-panel panel" aria-labelledby="score-title">
+            <div class="section-heading compact-heading"><div><p class="eyebrow">حصاد الرحلة</p><h2 id="score-title">لوحة النقاط</h2></div><span class="score-star" aria-hidden="true">✦</span></div>
+            <div class="score-list" id="score-list"></div>
+            <p class="score-note">كل إجابة صحيحة تفتح معرفة جديدة.</p>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="page-footer"><span>أبحر بأمان · BHDSF</span><span>التعلّم والحوار هما أفضل أدوات الحماية.</span></footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+</body>
+</html>
