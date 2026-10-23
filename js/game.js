@@ -3,8 +3,8 @@
   const COLORS = ['mint', 'coral', 'sun', 'sky'];
   const DEFAULT_STATE = {
     players: [
-      { name: 'اللاعب الأول', score: 0, position: 0 },
-      { name: 'اللاعب الثاني', score: 0, position: 0 }
+      { name: 'اللاعب الأول', score: 0, position: 0, correctStreak: 0 },
+      { name: 'اللاعب الثاني', score: 0, position: 0, correctStreak: 0 }
     ],
     currentPlayer: 0,
     unlockedLevel: 1,
@@ -13,6 +13,7 @@
     phase: 'movement',
     attemptsRemaining: 0,
     attemptsRolled: 0,
+    activeDifficulty: 'standard',
     answered: false
   };
   const state = loadState();
@@ -20,6 +21,8 @@
 
   const ui = {
     board: document.getElementById('board-route'),
+    dialog: document.getElementById('challenge-dialog'),
+    cardArt: document.getElementById('challenge-art'),
     playerList: document.getElementById('player-list'),
     scoreList: document.getElementById('score-list'),
     progressCount: document.getElementById('progress-count'),
@@ -47,24 +50,34 @@
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (!saved || !Array.isArray(saved.players) || !saved.players.length) return structuredClone(DEFAULT_STATE);
+      const players = saved.players
+        .filter((player) => player && typeof player === 'object' && !Array.isArray(player))
+        .slice(0, 4)
+        .map((player, index) => ({
+          name: typeof player.name === 'string' ? player.name.slice(0, 18) : `اللاعب ${index + 1}`,
+          score: Number.isFinite(player.score) ? Math.min(Number.MAX_SAFE_INTEGER, Math.max(0, player.score)) : 0,
+          position: Number.isInteger(player.position) ? Math.min(40, Math.max(0, player.position)) : 0,
+          correctStreak: Number.isInteger(player.correctStreak) ? Math.min(3, Math.max(0, player.correctStreak)) : 0
+        }));
+      if (!players.length) return structuredClone(DEFAULT_STATE);
       const validCompleted = Array.isArray(saved.completedLevels)
-        ? saved.completedLevels.filter((level) => Number.isInteger(level) && level >= 1 && level <= 40)
+        ? [...new Set(saved.completedLevels.filter((level) => Number.isInteger(level) && level >= 1 && level <= 40))]
         : [];
+      const unlockedLevel = Number.isInteger(saved.unlockedLevel) ? Math.min(40, Math.max(1, saved.unlockedLevel)) : 1;
+      const currentPlayer = Number.isInteger(saved.currentPlayer) ? saved.currentPlayer : 0;
       return {
         ...structuredClone(DEFAULT_STATE),
         ...saved,
-        players: saved.players.slice(0, 4).map((player, index) => ({
-          name: typeof player.name === 'string' ? player.name.slice(0, 18) : `اللاعب ${index + 1}`,
-          score: Number.isFinite(player.score) ? Math.max(0, player.score) : 0,
-          position: Number.isInteger(player.position) ? Math.min(40, Math.max(0, player.position)) : 0
-        })),
-        currentPlayer: Number.isInteger(saved.currentPlayer) ? saved.currentPlayer : 0,
-        unlockedLevel: Number.isInteger(saved.unlockedLevel) ? Math.min(40, Math.max(1, saved.unlockedLevel)) : 1,
+        players,
+        currentPlayer: ((currentPlayer % players.length) + players.length) % players.length,
+        unlockedLevel,
         completedLevels: validCompleted,
-        activeLevel: Number.isInteger(saved.activeLevel) ? Math.min(40, Math.max(1, saved.activeLevel)) : 1,
+        activeLevel: Number.isInteger(saved.activeLevel) ? Math.min(unlockedLevel, Math.max(1, saved.activeLevel)) : 1,
         phase: ['movement', 'attempts', 'answer', 'complete'].includes(saved.phase) ? saved.phase : 'movement',
-        attemptsRemaining: Number.isInteger(saved.attemptsRemaining) ? Math.max(0, saved.attemptsRemaining) : 0,
-        attemptsRolled: Number.isInteger(saved.attemptsRolled) ? Math.max(0, saved.attemptsRolled) : 0,
+        attemptsRemaining: Number.isInteger(saved.attemptsRemaining) ? Math.min(3, Math.max(0, saved.attemptsRemaining)) : 0,
+        attemptsRolled: Number.isInteger(saved.attemptsRolled) ? Math.min(3, Math.max(0, saved.attemptsRolled)) : 0,
+        lastMovement: Number.isInteger(saved.lastMovement) ? Math.min(6, Math.max(0, saved.lastMovement)) : 0,
+        activeDifficulty: saved.activeDifficulty === 'advanced' ? 'advanced' : 'standard',
         answered: Boolean(saved.answered)
       };
     } catch {
@@ -85,7 +98,16 @@
   }
 
   function currentCard() {
-    return window.BHDSFCards[state.activeLevel - 1];
+    let card;
+    if (state.activeDifficulty !== 'advanced') {
+      card = window.BHDSFCards[state.activeLevel - 1];
+    } else {
+      const groupIndex = Math.floor((state.activeLevel - 1) / 10);
+      const cardIndex = (state.activeLevel - 1) % 10;
+      const advancedCards = window.BHDSFAdvancedCards[groupIndex];
+      card = advancedCards[cardIndex % advancedCards.length];
+    }
+    return window.BHDSFI18n.localizeCard(card, state.activeLevel, state.activeDifficulty === 'advanced');
   }
 
   function render() {
@@ -95,7 +117,7 @@
     renderChallenge();
     const completed = state.completedLevels.length;
     ui.progressCount.textContent = `${toArabic(completed)} / ٤٠`;
-    ui.progressBar.style.width = `${Math.max(2.5, completed / 40 * 100)}%`;
+    ui.progressBar.value = completed;
     ui.levelCounter.textContent = `المحطة ${toArabic(state.unlockedLevel)} من ٤٠`;
     ui.turnName.textContent = activePlayer().name;
     ui.turnIndicator.textContent = `الدور الحالي: ${activePlayer().name}`;
@@ -104,6 +126,7 @@
     ui.hint.disabled = !['answer', 'attempts'].includes(state.phase);
     ui.movementDie.textContent = state.lastMovement ? window.BHDSFDice.faceFor(state.lastMovement) : '⚄';
     ui.attemptsDie.textContent = state.attemptsRolled || '?';
+    window.BHDSFI18n.apply();
   }
 
   function renderBoard() {
@@ -179,7 +202,10 @@
 
   function renderChallenge() {
     const card = currentCard();
-    ui.challengeCategory.textContent = state.phase === 'movement' ? 'بطاقة التحدي' : card.category;
+    window.BHDSFCardArt.render(ui.cardArt, state.activeLevel, state.activeDifficulty === 'advanced');
+    ui.challengeCategory.textContent = state.phase === 'movement'
+      ? 'بطاقة التحدي'
+      : `${card.category}${card.difficulty === 'advanced' ? ' · تحدٍ متقدم' : ''}`;
     ui.challengeLevel.textContent = `المحطة ${toArabic(state.activeLevel)}`;
     ui.challengeTitle.textContent = state.phase === 'movement'
       ? 'استعدوا للانطلاق'
@@ -204,14 +230,18 @@
       ? `المحاولات المتبقية: ${toArabic(state.attemptsRemaining)}`
       : state.phase === 'complete' ? 'اكتمل التحدي' : 'المحاولات: —';
     if (state.phase === 'movement') {
-      ui.feedback.innerHTML = 'حان دور <strong id="turn-player-name"></strong>.';
-      document.getElementById('turn-player-name').textContent = activePlayer().name;
+      ui.feedback.textContent = `حان دور ${activePlayer().name}.`;
     } else if (state.phase === 'attempts') {
       ui.feedback.textContent = 'اكشف عدد المحاولات، ثم اختاروا إجابتكم.';
     } else if (state.phase === 'complete') {
       ui.feedback.textContent = 'رائع! انتقلت الرحلة إلى اللاعب التالي.';
     } else {
       ui.feedback.textContent = 'تحدثوا معاً قبل اختيار الإجابة.';
+    }
+    if (state.phase === 'movement') {
+      if (ui.dialog.open) ui.dialog.close();
+    } else if (!ui.dialog.open) {
+      ui.dialog.showModal();
     }
   }
 
@@ -237,15 +267,18 @@
     const target = Math.min(state.unlockedLevel, Math.max(1, player.position + movement));
     player.position = target;
     state.activeLevel = target;
+    state.activeDifficulty = player.correctStreak >= 3 ? 'advanced' : 'standard';
     state.lastMovement = movement;
     state.attemptsRolled = 0;
     state.attemptsRemaining = 0;
     state.answered = false;
     state.phase = 'attempts';
+    window.BHDSFEffects.play('roll');
     animateDie(ui.movementDie);
     saveState();
     render();
     showToast(`تحرك ${player.name} ${toArabic(movement)} خطوات، ووصل إلى المحطة ${toArabic(target)}.`);
+    window.setTimeout(rollAttempts, 450);
   }
 
   function rollAttempts() {
@@ -253,6 +286,7 @@
     state.attemptsRolled = window.BHDSFDice.rollAttempts();
     state.attemptsRemaining = state.attemptsRolled;
     state.phase = 'answer';
+    window.BHDSFEffects.play('roll');
     animateDie(ui.attemptsDie);
     saveState();
     render();
@@ -264,17 +298,27 @@
     const card = currentCard();
     if (index === card.answer) {
       button.classList.add('correct');
+      window.BHDSFEffects.play('correct');
+      window.BHDSFEffects.celebrate(ui.dialog);
+      const player = activePlayer();
+      player.correctStreak += 1;
+      const reachedAdvancedMode = player.correctStreak === 3;
       const points = 100 + Math.max(0, state.attemptsRemaining - 1) * 25;
-      activePlayer().score += points;
+      player.score += points;
       if (!state.completedLevels.includes(state.activeLevel)) state.completedLevels.push(state.activeLevel);
       state.completedLevels.sort((a, b) => a - b);
       while (state.completedLevels.includes(state.unlockedLevel) && state.unlockedLevel < 40) state.unlockedLevel += 1;
       state.phase = 'complete';
-      ui.assistant.textContent = window.BHDSFAssistant.getFeedback(card, true);
+      ui.assistant.textContent = window.BHDSFAssistant.getFeedback(card, true)
+        + ` ${window.BHDSFAssistant.getEncouragement()}`
+        + (reachedAdvancedMode ? ' أتقنت هذا المستوى؛ سيصبح التحدي القادم أعمق.' : '');
       ui.hint.disabled = true;
       ui.feedback.textContent = `إجابة صحيحة! أضيفت ${toArabic(points)} نقطة إلى رصيد ${activePlayer().name}.`;
       state.currentPlayer = (state.currentPlayer + 1) % state.players.length;
-      if (state.completedLevels.length === 40) showToast('أكملتم المحطات الأربعين! رحلة رائعة.');
+      if (state.completedLevels.length === 40) {
+        window.BHDSFEffects.play('win');
+        showToast('أكملتم المحطات الأربعين! رحلة رائعة.');
+      }
       else showToast(`إجابة صحيحة، وربحتم ${toArabic(points)} نقطة!`);
       window.setTimeout(() => {
         state.phase = 'movement';
@@ -285,6 +329,8 @@
       }, 1300);
     } else {
       button.classList.add('incorrect');
+      window.BHDSFEffects.play('wrong');
+      activePlayer().correctStreak = 0;
       state.attemptsRemaining -= 1;
       state.answered = true;
       ui.assistant.textContent = window.BHDSFAssistant.getFeedback(card, false);
@@ -324,7 +370,7 @@
       showToast('اكتبوا اسماً قصيراً للاعب.');
       return;
     }
-    state.players.push({ name, score: 0, position: 0 });
+    state.players.push({ name, score: 0, position: 0, correctStreak: 0 });
     saveState();
     render();
   }
@@ -372,6 +418,11 @@
     ui.assistant.textContent = window.BHDSFAssistant.getFamilyTip();
   });
   document.getElementById('reset-button').addEventListener('click', resetGame);
+  document.getElementById('language-toggle').addEventListener('click', () => {
+    const nextLanguage = window.BHDSFI18n.getLanguage() === 'ar' ? 'en' : 'ar';
+    window.BHDSFI18n.setLanguage(nextLanguage);
+    render();
+  });
 
   if (!state.players.length) state.players = structuredClone(DEFAULT_STATE.players);
   state.currentPlayer %= state.players.length;

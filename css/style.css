@@ -45,8 +45,10 @@ h1 span { color: var(--coral); }
 .progress-summary { width: 205px; padding-bottom: 3px; }
 .progress-label { color: var(--muted); font-size: 11px; }
 .progress-summary strong { float: left; font: 600 12px 'Alexandria', sans-serif; }
-.progress-track { clear: both; height: 5px; margin-top: 10px; overflow: hidden; border-radius: 5px; background: #2a3a3d; }
-.progress-track span { display: block; width: 2.5%; height: 100%; border-radius: inherit; background: var(--mint); transition: width .35s ease; }
+.progress-track { display: block; width: 100%; height: 5px; clear: both; margin-top: 10px; appearance: none; border: 0; border-radius: 5px; background: #2a3a3d; }
+.progress-track::-webkit-progress-bar { border-radius: inherit; background: #2a3a3d; }
+.progress-track::-webkit-progress-value { border-radius: inherit; background: var(--mint); transition: width .35s ease; }
+.progress-track::-moz-progress-bar { border-radius: inherit; background: var(--mint); }
 .game-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(286px, .85fr); align-items: start; gap: 18px; }
 .main-column, .side-column { display: grid; gap: 16px; min-width: 0; }
 .panel { border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
@@ -71,6 +73,20 @@ h2 { margin: 0; font: 600 16px 'Alexandria', sans-serif; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .legend-dot { width: 8px; height: 8px; border-radius: 2px; background: #6d8c8e; }.legend-dot.unlocked { background: var(--mint); }.legend-dot.complete { background: var(--coral); }.legend-dot.locked { background: #536567; }
 .challenge-panel { padding: 20px 22px 17px; }
+.challenge-dialog { position: fixed; width: min(620px, calc(100vw - 28px)); max-width: none; max-height: min(88vh, 760px); padding: 0; overflow: auto; border: 1px solid #61796e; border-radius: 10px; background: var(--panel); color: var(--ink); box-shadow: 0 28px 90px #0009; }
+.challenge-dialog::backdrop { background: #071014c9; backdrop-filter: blur(7px); }
+.challenge-dialog[open] { animation: modal-enter .22s ease-out both; }
+.challenge-dialog .challenge-panel { border: 0; border-radius: 10px; }
+.challenge-art { position: relative; overflow: hidden; margin: 0 0 15px; border: 1px solid #ffffff1c; border-radius: 7px; aspect-ratio: 4 / 1; background: #183b3b; }
+.challenge-art svg { display: block; width: 100%; height: 100%; }
+.challenge-dialog.is-celebrating .challenge-panel { animation: success-pulse .5s ease-in-out 2; }
+.celebration-spark { position: absolute; z-index: 2; width: 9px; height: 14px; border-radius: 2px; opacity: 0; animation: spark-burst .95s ease-out forwards; pointer-events: none; }
+.celebration-spark.spark-0 { top: 16%; left: 14%; background: var(--mint); animation-delay: 0ms; }
+.celebration-spark.spark-1 { top: 26%; left: 29%; background: var(--coral); animation-delay: 35ms; }
+.celebration-spark.spark-2 { top: 12%; left: 44%; background: var(--sun); animation-delay: 70ms; }
+.celebration-spark.spark-3 { top: 31%; left: 59%; background: var(--sky); animation-delay: 105ms; }
+.celebration-spark.spark-4 { top: 18%; left: 74%; background: var(--mint); animation-delay: 140ms; }
+.celebration-spark.spark-5 { top: 34%; left: 86%; background: var(--coral); animation-delay: 175ms; }
 .challenge-heading { margin-bottom: 15px; }
 .challenge-prompt { min-height: 43px; margin: 0 0 15px; color: #d6dfd9; font-size: 13px; line-height: 1.9; }
 .answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
@@ -106,6 +122,9 @@ h2 { margin: 0; font: 600 16px 'Alexandria', sans-serif; }
 .page-footer { display: flex; justify-content: space-between; gap: 12px; padding: 23px 0 26px; color: #758783; font-size: 10px; }
 .toast { position: fixed; z-index: 5; bottom: 20px; left: 50%; max-width: calc(100vw - 32px); padding: 11px 16px; border: 1px solid #567368; border-radius: 7px; background: #203632; color: #e9f4e9; font-size: 12px; opacity: 0; pointer-events: none; transform: translate(-50%, 10px); transition: opacity .2s ease, transform .2s ease; }.toast.visible { opacity: 1; transform: translate(-50%, 0); }
 @keyframes tumble { 0%, 100% { transform: rotate(0); } 40% { transform: rotate(18deg) scale(1.08); } 70% { transform: rotate(-12deg); } }
+@keyframes modal-enter { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes success-pulse { 50% { box-shadow: inset 0 0 0 2px #91e2bd85; } }
+@keyframes spark-burst { 0% { opacity: 0; transform: translateY(8px) rotate(0) scale(.5); } 16% { opacity: 1; } 100% { opacity: 0; transform: translateY(-42px) rotate(180deg) scale(.2); } }
 
 @media (max-width: 960px) {
   .app-shell { padding: 0 25px; }

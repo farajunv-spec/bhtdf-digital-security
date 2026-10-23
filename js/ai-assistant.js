@@ -6,6 +6,13 @@ window.BHDSFAssistant = (() => {
     'راجعوا إعدادات الخصوصية معاً من وقت لآخر، فالتطبيقات تتغير.',
     'ذكّروا الصغار أن بإمكانهم التوقف عن المحادثة وطلب المساعدة في أي وقت.'
   ];
+  const encouragements = [
+    'تفكيركم الهادئ هو أقوى خطوة نحو الأمان.',
+    'أحسنتم التعاون؛ المعرفة تكبر حين نتشاركها.',
+    'كل سؤال جديد فرصة لتصبحوا أكثر استعداداً.',
+    'تقدم رائع، واصلوا التعلّم من دون لوم أو استعجال.',
+    'قرار آمن اليوم يصنع عادة رقمية أفضل غداً.'
+  ];
 
   function getHint(card) {
     return card ? card.hint : 'توقفوا لحظة، وتحققوا من المصدر قبل مشاركة أي بيانات.';
@@ -22,9 +29,13 @@ window.BHDSFAssistant = (() => {
     return familyTips[Math.floor(Math.random() * familyTips.length)];
   }
 
+  function getEncouragement() {
+    return encouragements[Math.floor(Math.random() * encouragements.length)];
+  }
+
   function getWelcome() {
     return 'أهلاً بكم! أنا هنا لأساعدكم على التفكير بهدوء. لا توجد إجابة محرجة، والتعلّم معاً هو الأهم.';
   }
 
-  return Object.freeze({ getHint, getFeedback, getFamilyTip, getWelcome });
+  return Object.freeze({ getHint, getFeedback, getFamilyTip, getEncouragement, getWelcome });
 })();
