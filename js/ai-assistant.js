@@ -15,26 +15,24 @@ window.BHDSFAssistant = (() => {
   ];
 
   function getHint(card) {
-    return card ? card.hint : 'توقفوا لحظة، وتحققوا من المصدر قبل مشاركة أي بيانات.';
+    return card ? card.hint : window.BHDSFI18n.t('hintDefault');
   }
 
   function getFeedback(card, isCorrect) {
-    if (!card) return 'كل خطوة صغيرة نحو الوعي تستحق الاحتفاء.';
-    return isCorrect
-      ? `أحسنتم! ${card.lesson}`
-      : `لا بأس، هذه فرصة للتعلّم. ${card.lesson}`;
+    if (!card) return window.BHDSFI18n.t('feedbackFallback');
+    return window.BHDSFI18n.t(isCorrect ? 'feedbackCorrect' : 'feedbackWrong', { lesson: card.lesson });
   }
 
   function getFamilyTip() {
-    return familyTips[Math.floor(Math.random() * familyTips.length)];
+    return window.BHDSFI18n.t('familyTips');
   }
 
   function getEncouragement() {
-    return encouragements[Math.floor(Math.random() * encouragements.length)];
+    return window.BHDSFI18n.t('motivation');
   }
 
   function getWelcome() {
-    return 'أهلاً بكم! أنا هنا لأساعدكم على التفكير بهدوء. لا توجد إجابة محرجة، والتعلّم معاً هو الأهم.';
+    return window.BHDSFI18n.t('welcomeGuide');
   }
 
   return Object.freeze({ getHint, getFeedback, getFamilyTip, getEncouragement, getWelcome });

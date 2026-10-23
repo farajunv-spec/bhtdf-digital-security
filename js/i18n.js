@@ -1,9 +1,9 @@
 window.BHDSFI18n = (() => {
   const strings = {
     ar: {
-      brand: 'أبحر بأمان', framework: 'إطار BHDSF للسلامة الرقمية', sideLabel: 'معلومات اللاعبين والمساعدة',
+      brand: 'أبحر بأمان', framework: 'إطار BHDSF للسلامة الرقمية', sideLabel: 'معلومات اللاعبين والمساعدة', homeLink: 'أبحر بأمان، الصفحة الرئيسية', gameBoard: 'لوحة اللعبة', boardStages: 'مراحل اللعبة', progressAria: 'التقدم في اللعبة', dice: 'النرد', playerMode: 'عدد اللاعبين', onePlayer: 'لاعب واحد', twoPlayers: 'لاعبان',
       familySpace: 'مساحة عائلية آمنة', journey: 'رحلة من ٤٠ محطة', headlineA: 'كل قرار ذكي،', headlineB: 'يقربك من الأمان.', welcome: 'تعلّموا معاً كيف تبحرون بثقة في العالم الرقمي.',
-      progress: 'تقدم الرحلة', mapEyebrow: 'خريطة الاستكشاف', mapTitle: 'مسار الأمان الرقمي', ocean: 'رحلة المعرفة تبدأ بخطوة', legend: 'دليل ألوان المراحل', unlocked: 'مفتوحة', completed: 'مكتملة', locked: 'مقفلة',
+      progress: 'تقدم الرحلة', progressCount: '{completed} / {total}', stationCounter: 'المحطة {level} من {total}', stationLabel: 'المحطة {level}، {status}', mapEyebrow: 'خريطة الاستكشاف', mapTitle: 'مسار الأمان الرقمي', ocean: 'رحلة المعرفة تبدأ بخطوة', legend: 'دليل ألوان المراحل', unlocked: 'مفتوحة', completed: 'مكتملة', locked: 'مقفلة',
       challenge: 'بطاقة التحدي', ready: 'استعدوا للانطلاق', intro: 'ارمِ نرد الحركة لتصل إلى محطتك التالية، ثم تعاونوا للإجابة عن التحدي.', choices: 'خيارات الإجابة', dice: 'النرد', moveDie: 'نرد الحركة', moveHelp: 'خطواتك نحو المحطة التالية', rollMove: 'ارمِ نرد الحركة', attemptsDie: 'نرد المحاولات', attemptsHelp: 'يحدد فرص الإجابة المتاحة', rollAttempts: 'اكشف المحاولات',
       crew: 'طاقم الرحلة', crewEyebrow: 'معاً نبحر', addPlayer: '＋ لاعب', guide: 'المرشد السيبراني', guideEyebrow: 'رفيق الرحلة', guideReady: 'جاهز للمساعدة', hint: 'أعطني تلميحاً', familyTip: 'نصيحة عائلية', scores: 'لوحة النقاط', scoreEyebrow: 'حصاد الرحلة', scoreNote: 'كل إجابة صحيحة تفتح معرفة جديدة.', footer: 'التعلّم والحوار هما أفضل أدوات الحماية.',
       reset: 'إعادة ضبط التقدم', switchLanguage: 'التبديل إلى الإنجليزية', station: 'المحطة', of: 'من', player: 'اللاعب', playerOne: 'اللاعب الأول', playerTwo: 'اللاعب الثاني', turn: 'حان دور {name}.', turnCurrent: 'الدور الحالي: {name}', playerAt: 'المحطة {level}', points: 'نقطة', shortPoints: 'ن', advanced: 'تحدٍ متقدم', howAct: 'كيف ستتصرف؟', allCorrect: 'أحسنتم، أتممتم التحدي!', done: 'اكتمل التحدي', attemptsRemaining: 'المحاولات المتبقية: {count}', attemptsDash: 'المحاولات: —',
@@ -14,12 +14,13 @@ window.BHDSFI18n = (() => {
       confirmReset: 'هل تريدون بدء رحلة جديدة؟ سيتم حذف النقاط والتقدم المحفوظ.', newJourney: 'بدأت رحلة جديدة.', saveError: 'تعذر حفظ التقدم على هذا الجهاز.', welcomeGuide: 'أهلاً بكم! أنا هنا لأساعدكم على التفكير بهدوء. لا توجد إجابة محرجة، والتعلّم معاً هو الأهم.',
       hintDefault: 'توقفوا لحظة، وتحققوا من المصدر قبل مشاركة أي بيانات.', feedbackFallback: 'كل خطوة صغيرة نحو الوعي تستحق الاحتفاء.', feedbackCorrect: 'أحسنتم! {lesson}', feedbackWrong: 'لا بأس، هذه فرصة للتعلّم. {lesson}', mastered: ' أتقنت هذا المستوى؛ سيصبح التحدي القادم أعمق.',
       motivation: ['تفكيركم الهادئ هو أقوى خطوة نحو الأمان.', 'أحسنتم التعاون؛ المعرفة تكبر حين نتشاركها.', 'كل سؤال جديد فرصة لتصبحوا أكثر استعداداً.', 'تقدم رائع، واصلوا التعلّم من دون لوم أو استعجال.', 'قرار آمن اليوم يصنع عادة رقمية أفضل غداً.'],
+      credit: 'تصميم: فرج الهدار — مبادرة السلامة الرقمية، إطار BHDSF',
       familyTips: ['اتفقوا على شخص بالغ يلجأ إليه الجميع عند رؤية شيء مقلق على الإنترنت.', 'اسألوا بعضكم: ما المعلومة التي لا نحتاج إلى مشاركتها كي نستمتع بهذه اللعبة؟', 'خصصوا وقتاً للحوار بلا لوم؛ السؤال المبكر يجعل حل المشكلات أسهل.', 'راجعوا إعدادات الخصوصية معاً من وقت لآخر، فالتطبيقات تتغير.', 'ذكّروا الصغار أن بإمكانهم التوقف عن المحادثة وطلب المساعدة في أي وقت.']
     },
     en: {
-      brand: 'Sail Safely', framework: 'BHDSF Digital Safety Framework', sideLabel: 'Players and help',
+      brand: 'Sail Safely', framework: 'BHDSF Digital Safety Framework', sideLabel: 'Players and help', homeLink: 'Sail Safely home', gameBoard: 'Game board', boardStages: 'Game stations', progressAria: 'Game progress', dice: 'Dice', playerMode: 'Number of players', onePlayer: '1 Player', twoPlayers: '2 Players',
       familySpace: 'A safe space for families', journey: 'A 40-station voyage', headlineA: 'Every wise choice', headlineB: 'brings you closer to safety.', welcome: 'Learn together to navigate the digital world with confidence.',
-      progress: 'Voyage progress', mapEyebrow: 'EXPLORE THE MAP', mapTitle: 'Digital Safety Route', ocean: 'Every journey of learning starts with one step', legend: 'Station status', unlocked: 'Open', completed: 'Complete', locked: 'Locked',
+      progress: 'Voyage progress', progressCount: '{completed} / {total}', stationCounter: 'Station {level} of {total}', stationLabel: 'Station {level}, {status}', mapEyebrow: 'EXPLORE THE MAP', mapTitle: 'Digital Safety Route', ocean: 'Every journey of learning starts with one step', legend: 'Station status', unlocked: 'Open', completed: 'Complete', locked: 'Locked',
       challenge: 'CHALLENGE CARD', ready: 'Ready to set sail', intro: 'Roll the movement die to reach your next station, then work together on the challenge.', choices: 'Answer choices', dice: 'Dice', moveDie: 'Movement die', moveHelp: 'Steps toward your next station', rollMove: 'Roll to move', attemptsDie: 'Attempt die', attemptsHelp: 'Sets your available attempts', rollAttempts: 'Reveal attempts',
       crew: 'Crew', crewEyebrow: 'SAIL TOGETHER', addPlayer: '+ Player', guide: 'Cyber Guide', guideEyebrow: 'YOUR VOYAGE COMPANION', guideReady: 'Ready to help', hint: 'Give me a hint', familyTip: 'Family tip', scores: 'Scoreboard', scoreEyebrow: 'VOYAGE RESULTS', scoreNote: 'Every correct answer unlocks new knowledge.', footer: 'Learning and conversation are your best tools for safety.',
       reset: 'Reset progress', switchLanguage: 'Switch to Arabic', station: 'Station', of: 'of', player: 'Player', playerOne: 'Player 1', playerTwo: 'Player 2', turn: "It's {name}'s turn.", turnCurrent: "{name}'s turn", playerAt: 'Station {level}', points: 'points', shortPoints: 'pts', advanced: 'ADVANCED CHALLENGE', howAct: 'What would you do?', allCorrect: 'Challenge complete!', done: 'Challenge complete', attemptsRemaining: 'Attempts remaining: {count}', attemptsDash: 'Attempts: —',
@@ -30,6 +31,7 @@ window.BHDSFI18n = (() => {
       confirmReset: 'Start a new voyage? Saved points and progress will be deleted.', newJourney: 'A new voyage has begun.', saveError: 'Progress could not be saved on this device.', welcomeGuide: 'Welcome aboard! I’m here to help you think things through. There are no embarrassing questions; learning together matters most.',
       hintDefault: 'Pause and verify the source before sharing any information.', feedbackFallback: 'Every small step toward awareness is worth celebrating.', feedbackCorrect: 'Well done! {lesson}', feedbackWrong: 'That’s okay; it’s a chance to learn. {lesson}', mastered: ' You have mastered this level. The next challenge will be deeper.',
       motivation: ['Your calm thinking is a strong step toward safety.', 'Great teamwork; knowledge grows when we share it.', 'Every new question helps you become more prepared.', 'Wonderful progress. Keep learning without blame or rush.', 'A safe choice today builds a better digital habit tomorrow.'],
+      credit: 'Designed by Faraj Al-Haddar — Digital Safety Initiative, BHDSF Framework',
       familyTips: ['Agree on a trusted adult everyone can talk to when something online feels wrong.', 'Ask each other: what information do we not need to share to enjoy this game?', 'Make time for blame-free conversations; asking early makes problems easier to solve.', 'Review privacy settings together from time to time; apps change.', 'Remind young people they can leave a conversation and ask for help at any time.']
     }
   };
@@ -54,12 +56,22 @@ window.BHDSFI18n = (() => {
     return language === 'ar' ? String(value).replace(/[0-9]/g, (digit) => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]) : String(value);
   }
 
-  function localizeCard(card, level, advanced) {
-    if (language !== 'en' || !window.BHDSFEnglishCards) return card;
+  function localizeCard(card, level, advanced, questionOffset = 0) {
+    if (language !== 'en') {
+      const toArabicDigits = (value) => String(value).replace(/[0-9]/g, (digit) => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
+      return {
+        ...card,
+        question: toArabicDigits(card.question),
+        choices: card.choices.map(toArabicDigits),
+        lesson: toArabicDigits(card.lesson),
+        hint: toArabicDigits(card.hint)
+      };
+    }
+    if (!window.BHDSFEnglishCards) return card;
     const domain = Math.floor((level - 1) / 10);
     const item = advanced
-      ? window.BHDSFEnglishCards.advanced[domain][((level - 1) % 10) % window.BHDSFEnglishCards.advanced[domain].length]
-      : window.BHDSFEnglishCards.standard[level - 1];
+      ? window.BHDSFEnglishCards.advanced[domain][(((level - 1) % 10) + questionOffset) % window.BHDSFEnglishCards.advanced[domain].length]
+      : window.BHDSFEnglishCards.standard[domain * 10 + (((level - 1) % 10) + questionOffset) % 10];
     if (!item) return card;
     return { ...card, category: window.BHDSFEnglishCards.categories[domain], question: item[0], choices: item[1], answer: item[2], lesson: item[3], hint: `Think through the whole situation and verify before sharing. ${item[3]}` };
   }
@@ -71,11 +83,10 @@ window.BHDSFI18n = (() => {
     document.querySelectorAll('[data-i18n]').forEach((element) => { element.textContent = t(element.dataset.i18n); });
     document.querySelectorAll('[data-i18n-title]').forEach((element) => { element.title = t(element.dataset.i18nTitle); });
     document.querySelectorAll('[data-i18n-aria]').forEach((element) => { element.setAttribute('aria-label', t(element.dataset.i18nAria)); });
-    const toggle = document.getElementById('language-toggle');
-    if (toggle) {
+    document.querySelectorAll('#language-toggle, #challenge-language-toggle').forEach((toggle) => {
       toggle.textContent = language === 'ar' ? 'EN' : 'عربي';
       toggle.setAttribute('aria-label', t('switchLanguage'));
-    }
+    });
     document.title = language === 'ar' ? 'أبحر بأمان | إطار BHDSF للسلامة الرقمية' : 'Sail Safely | BHDSF Digital Safety Framework';
   }
 

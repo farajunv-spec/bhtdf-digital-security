@@ -56,7 +56,10 @@ window.BHDSFCardArt = (() => {
     svg.append(art);
 
     const label = svgElement('text', { x: '38', y: '105', fill: palette.accent, 'font-family': 'sans-serif', 'font-size': '30', 'font-weight': '700', opacity: '.9' });
-    label.textContent = String(station).padStart(2, '0');
+    const stationLabel = String(station).padStart(2, '0');
+    label.textContent = document.documentElement.lang === 'ar'
+      ? stationLabel.replace(/[0-9]/g, (digit) => '٠١٢٣٤٥٦٧٨٩'[Number(digit)])
+      : stationLabel;
     svg.append(label);
     if (advanced) {
       svg.append(svgElement('path', { d: 'M613 37 l9 19 21 3 -15 14 4 21 -19 -10 -19 10 4 -21 -15 -14 21 -3Z', fill: palette.warm }));

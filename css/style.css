@@ -108,6 +108,12 @@ h2 { margin: 0; font: 600 16px 'Alexandria', sans-serif; }
 .primary-button:hover:not(:disabled), .secondary-button:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }.primary-button:disabled, .secondary-button:disabled { cursor: not-allowed; opacity: .45; }
 .players-panel, .score-panel { padding: 18px 18px 16px; }
 .compact-heading h2 { font-size: 14px; }.text-button { border: 0; background: transparent; color: var(--mint); font-size: 11px; cursor: pointer; }.text-button:hover { color: white; }
+.player-mode { display: inline-grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 3px; border: 1px solid var(--line); border-radius: 7px; background: var(--canvas); }
+.player-mode-button { min-height: 29px; padding: 0 7px; border: 0; border-radius: 4px; background: transparent; color: var(--muted); font-size: 10px; white-space: nowrap; cursor: pointer; }
+.player-mode-button[aria-pressed="true"] { background: var(--mint-dark); color: var(--ink); }
+.player-mode-button:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+.challenge-tools { display: flex; align-items: center; gap: 8px; }
+.challenge-language-button { padding: 5px 8px; }
 .player-list, .score-list { display: grid; gap: 8px; margin-top: 16px; }
 .player-row { display: flex; align-items: center; gap: 9px; padding: 9px 10px; border: 1px solid transparent; border-radius: 6px; background: #1d2d32; }
 .player-row.active { border-color: #b4d6a26b; background: #253b38; }
